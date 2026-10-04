@@ -1,4 +1,6 @@
-const assetBase = 'https://idancekioskapp.vercel.app/assets/';
+const assetBase = './assets/';
+// Prices shown in the supplied design; confirm before retail deployment.
+const prices = { 'G-600L': 29, FreedomSolo: 19, StageRocker2: 69 };
 const catalogue = [
   ['G-600L', 'Keyboard', 'keyb.png'],
   ['G-600LA', 'Keyboard', 'g600al.png'],
@@ -39,6 +41,16 @@ function makeCard([model, category, image], compact = false) {
   const title = document.createElement('strong');
   title.textContent = model;
   button.append(img, title);
+  {
+    const price = document.createElement('span');
+    price.className = 'product-price';
+    price.append(prices[model] !== undefined ? String(prices[model]) : '—', ' ');
+    if (prices[model] === undefined) price.setAttribute('aria-label', '價錢待確認');
+    const currency = document.createElement('small');
+    currency.textContent = 'EUR';
+    price.append(currency);
+    button.append(price);
+  }
   if (!compact) {
     const label = document.createElement('small');
     label.textContent = category;
@@ -58,10 +70,10 @@ function makeCard([model, category, image], compact = false) {
     });
     player.pause();
     player.poster = assetBase + image;
-    player.src = 'https://idancekioskapp.vercel.app/vo/' + encodeURIComponent(productVideos[model]);
+    player.src = './vo/' + encodeURIComponent(productVideos[model]);
     player.setAttribute('aria-label', `${model} 產品影片`);
     videoStatus.textContent = model;
-    document.querySelector('.hero').scrollIntoView({ block: 'start' });
+
     try {
       await player.play();
     } catch {
@@ -72,23 +84,31 @@ function makeCard([model, category, image], compact = false) {
 }
 // Curated collections can share products; model details stay in the catalogue above.
 const categories = [
-  { name: 'Keyboard', image: 'keyb.png', models: ['G-600L', 'G-600LA', 'G900', 'KEY-49'] },
-  { name: 'Drums', image: 'StageRocker2.png', models: ['FreedomSolo', 'StageRocker2'] },
-  { name: 'Microphones', image: 'mic.svg', models: ['MIC-01', 'LIVE-02'] },
-  { name: 'Karaoke', image: 'duo.svg', models: ['LIVE-02', 'MIC-01', 'PARTY-12'] },
-  { name: 'Party Speakers', image: 'speaker.svg', models: ['PARTY-12'] },
-  { name: 'Mixers', image: 'mixer.svg', models: ['MIX-4'] },
-  { name: 'Music Production', image: 'g900.png', models: ['G900', 'G-600LA', 'MIX-4'] },
-  { name: 'Portable Music', image: 'FreedomSolo.png', models: ['FreedomSolo', 'MIC-01'] },
-  { name: 'Live Performance', image: 'StageRocker2.png', models: ['StageRocker2', 'LIVE-02', 'PARTY-12'] },
-  { name: 'Home Studio', image: 'keys.svg', models: ['KEY-49', 'MIC-01', 'MIX-4'] },
-  { name: 'Vocal Recording', image: 'mic.svg', models: ['MIC-01', 'LIVE-02', 'MIX-4'] },
-  { name: 'Starter Collection', image: 'g600al.png', models: ['G-600L', 'FreedomSolo', 'KEY-49'] },
+  { name: 'KEYBOARDS', models: ['G-600L', 'G-600LA', 'G900', 'KEY-49'] },
+  { name: 'GUITARS', models: [] },
+  { name: 'DRUMS', models: ['FreedomSolo', 'StageRocker2'] },
+  { name: 'DEEJAY', models: ['MIX-4'] },
+  { name: 'KARAOKE', models: ['LIVE-02', 'MIC-01', 'PARTY-12'] },
+  { name: 'PARTY SPEAKERS', models: ['PARTY-12'] },
+  { name: 'K-POP', models: [] },
+  { name: 'POCKET', models: [] },
+  { name: 'mini VERSE', models: [] },
+  { name: 'mySTAGE', models: [] },
+  { name: 'GROOVE BRIX', models: [] },
+  { name: '', models: [] },
 ];
 function selectCategory(category, scroll = false) {
   const visible = category.models.map(model => catalogue.find(product => product[0] === model));
   document.querySelector('.featured-grid').replaceChildren(...visible.map(product => makeCard(product, true)));
-  document.querySelector('#featured-category').textContent = category.name;
+  const grid = document.querySelector('.featured-grid');
+  for (let i = visible.length; i < 8; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'product-card product-placeholder';
+    slot.setAttribute('aria-hidden', 'true');
+    grid.append(slot);
+  }
+  document.querySelector('#featured').scrollTop = 0;
+  document.querySelector('#featured-category').textContent = visible.length ? category.name : `${category.name}: 暫未有產品`;
   document.querySelector('#selection-status').textContent = `${category.name}: ${visible.length} products`;
   document.querySelectorAll('.category-card').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.category === category.name));
@@ -101,18 +121,63 @@ categories.forEach(category => {
   button.className = 'category-card';
   button.dataset.category = category.name;
   button.setAttribute('aria-controls', 'featured');
-  const image = document.createElement('img');
-  image.src = assetBase + category.image;
-  image.alt = '';
-  image.loading = 'lazy';
   const label = document.createElement('strong');
   label.textContent = category.name;
-  button.append(image, label);
-  button.addEventListener('click', () => selectCategory(category, true));
+  button.append(label);
+  if (!category.name) {
+    button.disabled = true;
+    button.setAttribute('aria-label', '預留分類');
+  }
+  button.addEventListener('click', () => selectCategory(category));
   document.querySelector('.category-grid').append(button);
 });
 selectCategory(categories[0]);
-if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  document.querySelector('video').autoplay = false;
-  document.querySelector('video').pause();
+const introScreen = document.querySelector('#intro-screen');
+const introVideo = document.querySelector('#intro-video');
+const productPage = document.querySelector('#top');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let idleTimer;
+
+function showIntro() {
+  clearTimeout(idleTimer);
+  ++playbackRequest;
+  player.pause();
+  productPage.hidden = true;
+  productPage.inert = true;
+  introScreen.hidden = false;
+  document.body.classList.add('intro-active');
+  introVideo.currentTime = 0;
+  introVideo.play().catch(() => {
+    // The full-screen button remains available if autoplay is blocked.
+  });
+  introScreen.focus({ preventScroll: true });
+}
+
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+  if (introScreen.hidden) idleTimer = setTimeout(showIntro, 10000);
+}
+
+['pointerdown', 'click', 'keydown', 'wheel', 'touchmove', 'scroll'].forEach(event => {
+  document.addEventListener(event, resetIdleTimer, { capture: true, passive: true });
+});
+
+introScreen.addEventListener('click', () => {
+  introVideo.pause();
+  introScreen.hidden = true;
+  productPage.hidden = false;
+  productPage.inert = false;
+  document.body.classList.remove('intro-active');
+  productPage.focus({ preventScroll: true });
+  resetIdleTimer();
+  if (!reducedMotion) {
+    player.play().catch(() => {
+      videoStatus.textContent = '請按播放鍵開始播放。';
+    });
+  }
+});
+
+if (reducedMotion) {
+  introVideo.autoplay = false;
+  introVideo.pause();
 }

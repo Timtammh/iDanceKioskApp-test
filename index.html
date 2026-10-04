@@ -3,358 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#000300">
-  <title>iDance — Home</title>
-  <style>
-    /* 基本設定 */
-    * { box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      padding: 19px 23px 33px;
-      background: #6b6b6b;
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    /* 頁面容器 */
-    .page {
-      max-width: 1088px;
-      margin: 0 auto;
-      background: #000300;
-      border: 2px solid #535653;
-    }
-
-    /* Logo 區域 */
-    .logo-area {
-      height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .logo {
-      display: block;
-      text-decoration: none;
-    }
-
-    .logo img {
-      display: block;
-      width: auto;
-      height: 90px;
-    }
-
-    /* 導覽列 */
-    .navigation {
-      min-height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 7%;
-      color: #0b0b0b;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 54px;
-      width: 100%;
-    }
-
-    .nav-links a,
-    .nav-links button {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: #ffffff;
-      background: none;
-      border: 0;
-      padding: 10px 0;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      line-height: 1.3;
-      white-space: nowrap;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .nav-links a[aria-current="page"],
-    .nav-links a:hover,
-    .nav-links button:hover {
-      color: #b5ed00;
-    }
-
-    .nav-arrow {
-      width: 10px;
-      height: 10px;
-      border-right: 2px solid currentColor;
-      border-bottom: 2px solid currentColor;
-      transform: translateY(-3px) rotate(45deg);
-    }
-
-    /* 鍵盤焦點 */
-    :focus-visible {
-      outline: 2px solid #3686ff;
-      outline-offset: 6px;
-    }
-
-    /* Hero 影片區域 */
-    .hero {
-      height: 478px;
-      position: relative;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-    }
-
-    .hero video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      min-height: 0;
-      object-fit: cover;
-    }
-
-    /* 產品區域 */
-    .products {
-      padding: 45px 80px 87px;
-      scroll-margin-top: 20px;
-    }
-
-    .products h1 {
-      margin: 0 0 82px;
-      text-align: center;
-      font-size: 24px;
-      line-height: 29px;
-      font-weight: 400;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      column-gap: 72px;
-      row-gap: 66px;
-    }
-
-    .product-card {
-      display: block;
-      width: 100%;
-      aspect-ratio: 259 / 281;
-      border: 2px solid transparent;
-      border-radius: 36px;
-      background: #fff;
-      cursor: pointer;
-      transition: border-color 150ms, box-shadow 150ms;
-    }
-
-    .product-card:hover {
-      border-color: #a8caff;
-    }
-
-    .product-card[aria-pressed="true"] {
-      border-color: #2680ff;
-      box-shadow: 0 0 0 1px #2680ff;
-    }
-
-    .product-card:focus-visible {
-      outline-offset: 5px;
-    }
-
-    /* 無障礙輔助文字 */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    /* 資訊彈出視窗 */
-    dialog {
-      width: min(420px, calc(100% - 40px));
-      border: 1px solid #777;
-      border-radius: 20px;
-      padding: 30px;
-      background: #101410;
-      color: #fff;
-    }
-
-    dialog::backdrop {
-      background: rgb(0 0 0 / 70%);
-    }
-
-    dialog h2 {
-      margin-top: 0;
-      font-weight: 400;
-    }
-
-    dialog p {
-      color: #ccc;
-      line-height: 1.7;
-    }
-
-    .close-dialog {
-      margin-top: 12px;
-      padding: 10px 20px;
-      border: 0;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    /* 大螢幕 */
-    @media (min-width: 1400px) {
-      body {
-        padding-top: 24px;
-      }
-    }
-
-    /* 平板版 */
-    @media (max-width: 900px) {
-      .navigation {
-        padding: 18px 5%;
-      }
-
-      .nav-links {
-        gap: 18px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .nav-links a,
-      .nav-links button {
-        font-size: 22px;
-      }
-
-      .products {
-        padding: 45px 45px 65px;
-      }
-
-      .product-grid {
-        gap: 40px;
-      }
-
-      .product-card {
-        border-radius: 28px;
-      }
-    }
-
-    /* 手機版 */
-    @media (max-width: 600px) {
-      body {
-        padding: 12px;
-      }
-
-      .logo-area {
-        height: 110px;
-      }
-
-      .logo img {
-        height: 86px;
-      }
-
-      .navigation {
-        min-height: 70px;
-        padding: 14px 18px;
-      }
-
-      .nav-links {
-        gap: 8px 24px;
-      }
-
-      .nav-links a,
-      .nav-links button {
-        font-size: 18px;
-        gap: 8px;
-      }
-
-      .nav-arrow {
-        width: 8px;
-        height: 8px;
-      }
-
-      .hero {
-        height: 340px;
-      }
-
-      .products {
-        padding: 36px 22px 45px;
-      }
-
-      .products h1 {
-        margin-bottom: 42px;
-      }
-
-      .product-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 24px 20px;
-      }
-
-      .product-card {
-        border-radius: 24px;
-      }
-    }
-
-    /* 減少動態效果偏好 */
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      .product-card {
-        transition: none;
-      }
-    }
-  </style>
-  <link rel="stylesheet" href="layout.css?v=video-fit-3">
+  <meta name="theme-color" content="#000000">
+  <title>iDance — Product Kiosk</title>
+  <link rel="stylesheet" href="layout.css?v=kiosk-9">
 </head>
-<body>
-  <div class="page" id="top">
-    <header>
-      <div class="logo-area">
-        <a class="logo logo-idance" href="#top" aria-label="iDance 首頁"><img src="./logo.svg" alt="iDance" width="100" height="auto"></a>
-        <a class="logo" href="#top" aria-label="JC 首頁"><img src="./JClogo.svg" alt="JC" width="150" height="112"></a>
-      </div>
+<body class="intro-active">
+  <button class="intro-screen" id="intro-screen" type="button" aria-label="進入產品頁">
+    <video id="intro-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+      <source src="./vo/web-vo.mp4" type="video/mp4">
+    </video>
+  </button>
+  <div class="page" id="top" hidden inert tabindex="-1">
+  <div class="ambient-background" aria-hidden="true">
+    <span class="ambient-note" style="--x:3%;--y:2.0%;--duration:8s;--delay:-0s;--drift:-24px">♪</span>
+    <span class="ambient-dot" style="--x:32%;--y:3.3%;--duration:10s;--delay:-2s;--drift:24px"></span>
+    <span class="ambient-dot" style="--x:61%;--y:4.6%;--duration:12s;--delay:-4s;--drift:-24px"></span>
+    <span class="ambient-note" style="--x:90%;--y:5.9%;--duration:14s;--delay:-6s;--drift:24px">♫</span>
+    <span class="ambient-dot" style="--x:25%;--y:2.2%;--duration:16s;--delay:-8s;--drift:-24px"></span>
+    <span class="ambient-dot" style="--x:54%;--y:3.5%;--duration:18s;--delay:-10s;--drift:24px"></span>
+    <span class="ambient-note" style="--x:83%;--y:4.8%;--duration:8s;--delay:-12s;--drift:-24px">♬</span>
+    <span class="ambient-dot" style="--x:18%;--y:6.1%;--duration:10s;--delay:-14s;--drift:24px"></span>
+    <span class="ambient-dot" style="--x:47%;--y:2.4%;--duration:12s;--delay:-16s;--drift:-24px"></span>
+    <span class="ambient-note" style="--x:76%;--y:3.7%;--duration:14s;--delay:-18s;--drift:24px">♪</span>
+    <span class="ambient-dot" style="--x:11%;--y:5.0%;--duration:16s;--delay:-20s;--drift:-24px"></span>
+    <span class="ambient-dot" style="--x:40%;--y:6.3%;--duration:18s;--delay:-22s;--drift:24px"></span>
+    <span class="ambient-note" style="--x:69%;--y:2.6%;--duration:8s;--delay:-24s;--drift:-24px">♫</span>
+    <span class="ambient-dot" style="--x:4%;--y:3.9%;--duration:10s;--delay:-26s;--drift:24px"></span>
+    <span class="ambient-dot" style="--x:33%;--y:85.0%;--duration:12s;--delay:-28s;--drift:-24px"></span>
+    <span class="ambient-note" style="--x:62%;--y:92.0%;--duration:14s;--delay:-30s;--drift:24px">♬</span>
+    <span class="ambient-dot" style="--x:91%;--y:71.0%;--duration:16s;--delay:-32s;--drift:-24px"></span>
+    <span class="ambient-dot" style="--x:26%;--y:78.0%;--duration:18s;--delay:-34s;--drift:24px"></span>
+    <span class="ambient-note" style="--x:55%;--y:85.0%;--duration:8s;--delay:-36s;--drift:-24px">♪</span>
+    <span class="ambient-dot" style="--x:84%;--y:92.0%;--duration:10s;--delay:-38s;--drift:24px"></span>
+    <span class="ambient-dot" style="--x:19%;--y:71.0%;--duration:12s;--delay:-40s;--drift:-24px"></span>
+    <span class="ambient-note" style="--x:48%;--y:78.0%;--duration:14s;--delay:-42s;--drift:24px">♫</span>
+    <span class="ambient-dot" style="--x:77%;--y:85.0%;--duration:16s;--delay:-44s;--drift:-24px"></span>
+    <span class="ambient-dot" style="--x:12%;--y:92.0%;--duration:18s;--delay:-46s;--drift:24px"></span>
+    <span class="ambient-note" style="--x:41%;--y:71.0%;--duration:8s;--delay:-48s;--drift:-24px">♬</span>
+    <span class="ambient-dot" style="--x:70%;--y:78.0%;--duration:10s;--delay:-50s;--drift:24px"></span>
+    <span class="ambient-dot" style="--x:5%;--y:85.0%;--duration:12s;--delay:-52s;--drift:-24px"></span>
+    <span class="ambient-note" style="--x:34%;--y:92.0%;--duration:14s;--delay:-54s;--drift:24px">♪</span>
+    <span class="ambient-dot" style="--x:63%;--y:71.0%;--duration:16s;--delay:-56s;--drift:-24px"></span>
+    <span class="ambient-dot" style="--x:92%;--y:78.0%;--duration:18s;--delay:-58s;--drift:24px"></span>
+    <span class="ambient-note" style="--x:27%;--y:85.0%;--duration:8s;--delay:-60s;--drift:-24px">♫</span>
+    <span class="ambient-dot" style="--x:56%;--y:92.0%;--duration:10s;--delay:-62s;--drift:24px"></span>
+    <span class="ambient-dot" style="--x:85%;--y:71.0%;--duration:12s;--delay:-64s;--drift:-24px"></span>
+    <span class="ambient-note" style="--x:20%;--y:78.0%;--duration:14s;--delay:-66s;--drift:24px">♬</span>
+    <span class="ambient-dot" style="--x:49%;--y:85.0%;--duration:16s;--delay:-68s;--drift:-24px"></span>
+    <span class="ambient-dot" style="--x:78%;--y:92.0%;--duration:18s;--delay:-70s;--drift:24px"></span>
+    <span class="ambient-note" style="--x:13%;--y:71.0%;--duration:8s;--delay:-72s;--drift:-24px">♪</span>
+    <span class="ambient-dot" style="--x:42%;--y:78.0%;--duration:10s;--delay:-74s;--drift:24px"></span>
+    <span class="ambient-dot" style="--x:71%;--y:85.0%;--duration:12s;--delay:-76s;--drift:-24px"></span>
+    <span class="ambient-note" style="--x:6%;--y:92.0%;--duration:14s;--delay:-78s;--drift:24px">♫</span>
+    <span class="ambient-dot" style="--x:35%;--y:71.0%;--duration:16s;--delay:-80s;--drift:-24px"></span>
+    <span class="ambient-dot" style="--x:64%;--y:78.0%;--duration:18s;--delay:-82s;--drift:24px"></span>
+  </div>
+    <header class="logo-area">
+      <a class="logo logo-idance" href="#top" aria-label="iDance 首頁"><img src="./logo.svg" alt=""><span>iDance</span></a>
+      <a class="logo logo-partner" href="#top" aria-label="JC 首頁"><img src="./JClogo.svg" alt="JC"></a>
     </header>
     <main>
-      <section class="hero" aria-label="品牌影片">
-        <video id="product-video" autoplay muted loop playsinline controls preload="metadata" aria-label="iDance 品牌影片">
+      <section class="hero" aria-label="產品影片">
+        <video id="product-video" muted loop playsinline controls preload="metadata" aria-label="iDance 品牌影片">
           <source src="./vo.mp4" type="video/mp4">
           你的瀏覽器不支援影片播放，請<a href="./vo.mp4">下載影片</a>觀看。
         </video>
-      </section>
-      <p id="video-status" role="status" style="text-align: center; margin: 12px 0;"></p>
-      <section class="featured" id="featured" aria-labelledby="featured-title">
-        <h1 id="featured-title">Featured Products</h1>
-        <p id="featured-category" class="featured-category"></p>
-        <div class="featured-grid"></div>
+        <p id="video-status" role="status"></p>
       </section>
       <section class="products" id="products" aria-labelledby="products-title">
-        <h2 id="products-title">Explore Categories</h2>
-        <div class="category-grid" aria-labelledby="products-title">
-        </div>
+        <h2 class="sr-only" id="products-title">Product categories</h2>
+        <div class="category-grid" aria-labelledby="products-title"></div>
         <p class="sr-only" id="selection-status" role="status"></p>
+      </section>
+      <section class="featured" id="featured" aria-labelledby="featured-title" tabindex="0">
+        <h1 class="sr-only" id="featured-title">Products</h1>
+        <p id="featured-category" class="sr-only"></p>
+        <div class="featured-grid"></div>
       </section>
     </main>
   </div>
-  <script src="catalogue.js?v=product-video-3"></script>
+  <script src="catalogue.js?v=kiosk-5"></script>
 </body>
 </html>
