@@ -155,7 +155,7 @@ function showIntro() {
 
 function resetIdleTimer() {
   clearTimeout(idleTimer);
-  if (introScreen.hidden) idleTimer = setTimeout(showIntro, 10000);
+  if (introScreen.hidden) idleTimer = setTimeout(showIntro, 3 * 60 * 1000);
 }
 
 ['pointerdown', 'click', 'keydown', 'wheel', 'touchmove', 'scroll'].forEach(event => {
