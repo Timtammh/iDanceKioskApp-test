@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Super Starfish";
-  src: url("./assets/fonts/Super Starfish.otf") format("opentype");
+  src: url("./assets/fonts/Super%20Starfish.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -56,6 +56,11 @@ body { background: #000; }
 .page { position: relative; isolation: isolate; overflow: hidden; }
 .ambient-background { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: #000; }
 .ambient-background span { position: absolute; left: var(--x); top: var(--y); color: #00cce8; opacity: .28; animation: ambient-float var(--duration) ease-in-out var(--delay) infinite alternate; }
+.ambient-background .ambient-gap { animation-name: ambient-gap-float; }
+@keyframes ambient-gap-float {
+  from { transform: translate3d(-.2cqw, -.35cqw, 0); opacity: .5; }
+  to { transform: translate3d(.2cqw, .35cqw, 0); opacity: .85; }
+}
 .ambient-note { font-family: inherit; font-size: clamp(16px, 2vw, 28px); line-height: 1; }
 .ambient-dot { width: 4px; height: 4px; border-radius: 50%; background: #43d8ef; box-shadow: 0 0 10px rgb(67 216 239 / 25%); }
 .ambient-background span:nth-child(4n) { color: #a781dd; background-color: transparent; }

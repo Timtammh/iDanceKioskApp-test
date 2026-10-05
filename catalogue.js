@@ -170,11 +170,8 @@ introScreen.addEventListener('click', () => {
   document.body.classList.remove('intro-active');
   productPage.focus({ preventScroll: true });
   resetIdleTimer();
-  if (!reducedMotion) {
-    player.play().catch(() => {
-      videoStatus.textContent = '請按播放鍵開始播放。';
-    });
-  }
+  selectCategory(categories[0]);
+  document.querySelector('.featured-grid button.product-card').click();
 });
 
 if (reducedMotion) {
