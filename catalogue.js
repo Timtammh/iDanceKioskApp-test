@@ -137,6 +137,37 @@ const introVideo = document.querySelector('#intro-video');
 const productPage = document.querySelector('#top');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let idleTimer;
+const introSound = document.querySelector('#intro-sound');
+let introMuted = false;
+let introPlayRequest = 0;
+
+function updateIntroSound() {
+  introSound.textContent = introVideo.muted ? 'SOUND ON' : 'MUTE';
+  introSound.setAttribute('aria-label', introVideo.muted ? '開啟開場影片聲音' : '靜音開場影片');
+  introSound.setAttribute('aria-pressed', String(introVideo.muted));
+}
+
+async function playIntro() {
+  const request = ++introPlayRequest;
+  introVideo.muted = introMuted;
+  updateIntroSound();
+  try {
+    await introVideo.play();
+  } catch (error) {
+    if (request !== introPlayRequest || introScreen.hidden) return;
+    if (error.name === 'NotAllowedError' && !introVideo.muted) {
+      introVideo.muted = true;
+      updateIntroSound();
+      try { await introVideo.play(); } catch (_) { /* Sound button can retry playback. */ }
+    }
+  }
+}
+
+introVideo.addEventListener('volumechange', updateIntroSound);
+introSound.addEventListener('click', () => {
+  introMuted = !introVideo.muted;
+  playIntro();
+});
 
 function showIntro() {
   clearTimeout(idleTimer);
@@ -147,9 +178,7 @@ function showIntro() {
   introScreen.hidden = false;
   document.body.classList.add('intro-active');
   introVideo.currentTime = 0;
-  introVideo.play().catch(() => {
-    // The full-screen button remains available if autoplay is blocked.
-  });
+  playIntro();
   introScreen.focus({ preventScroll: true });
 }
 
@@ -163,6 +192,7 @@ function resetIdleTimer() {
 });
 
 introScreen.addEventListener('click', () => {
+  ++introPlayRequest;
   introVideo.pause();
   introScreen.hidden = true;
   productPage.hidden = false;
@@ -177,4 +207,6 @@ introScreen.addEventListener('click', () => {
 if (reducedMotion) {
   introVideo.autoplay = false;
   introVideo.pause();
+} else {
+  playIntro();
 }
