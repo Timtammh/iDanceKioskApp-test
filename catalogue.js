@@ -20,27 +20,27 @@ const prices = {
 };
 
 const catalogue = [
-  ['G-600L', 'Keyboard', 'g600al.png'],
-  ['G-600LA', 'Keyboard', 'g600al.png'],
+  ['G-600L', 'Keyboard', 'G600L.png'],
+  ['G-600LA', 'Keyboard', 'G600LA.png'],
   ['G900', 'Keyboard', 'g900.png'],
   ['JAMHERO2E', 'GUITAR', 'JAMHERO2E.jpg'],
   ['STAGEROCKER2DJ', 'DRUMS', 'StageRocker2.png'], 
-  ['XD301(BK)', 'DEEJAY', 'XD301.png'], 
+  ['XD301', 'DEEJAY', 'XD301.png'], 
   ['BEATBOXSTATION', 'DEEJAY', 'BEATBOXS.png'], 
   ['BOOMBOX', 'DEEJAY', 'BoomBox.png'], 
-  ['PM31(SL)', 'KARAOKE ', 'PM31(SL).png'], 
+  ['PM31', 'KARAOKE ', 'PM31(SL).png'], 
   ['CYCLONE-400(BK)', 'PARTY SPEAKERS', 'cyclone.png'], 
   ['PARTY-GROOVE(BK)', 'PARTY SPEAKERS', 'pg.jpg'], 
   ['PARTY-GROOVE-X3', 'PARTY SPEAKERS', 'PartyGroove3.png'], 
   ['CUBEX2-K', 'PARTY SPEAKERS', 'cubex2.png'], 
   ['K200-2W', 'PARTY SPEAKERS', 'K200-2W.png'], 
   ['GBS-1/3/4', 'PARTY SPEAKERS', 'GBS.png'], 
-  ['SONIC', 'K-POP', 'SONIC(CY)_pic1.png'], 
-  ['VS-1 KPOP', 'K-POP', 'VS1KPOP(C)_PIc1-LED.png'], 
-  ['PM8KPOP', 'K-POP', 'PM8KPOP(CY)_pic01-LED.png'], 
-  ['PocketDJ', 'K-POP', 'PKDJ(Gr)_pic2.png'], 
-  ['DEEJAY ONE-KP', 'K-POP', 'DEEJAY ONE-KP(CY)_20260220_pic3-ED.png'], 
-  ['K-SYNTH', 'K-POP', 'kS!.13316.png'], 
+  ['SONIC', 'K-POP', 'sonic-2.png'], 
+  ['VS-1 KPOP', 'K-POP', 'vs1kpop.png'], 
+  ['PM8KPOP', 'K-POP', 'PM8KPOP.png'], 
+  ['PocketDJ', 'K-POP', 'PKDJ-3.png'], 
+  ['DEEJAY ONE-KP', 'K-POP', 'DEEJAY ONE-3.png'], 
+  ['K-SYNTH', 'K-POP', 'KS.png'], 
 
 ];
 
@@ -52,7 +52,7 @@ const productVideos = {
   'StageRocker2': 'Stage Rocker 2 DJ_2_HD.mp4',
   'JAMHERO2E': 'JamHero3.mp4',
   'STAGEROCKER2DJ': 'Stage Rocker 2 DJ_FRHD.mp4',
-  'XD301(BK)': 'XD301.mp4',
+  'XD301': 'XD301.mp4',
   'BEATBOXSTATION': 'BEATBOX.mp4',
   'BOOMBOX': 'BoomBox-FR.mp4',
   'PM31(SL)': 'PM31(SL).mp4',
@@ -62,10 +62,46 @@ const productVideos = {
   'CUBEX2-K': 'CUBE X2 KPOP-FRHD.mp4',
   'K200-2W': 'K200-2W.mp4',
   'GBS-1/3/4': 'GBS-1_3_4.mp4',
+  'SONIC': 'sonic.mp4',
+  'VS-1 KPOP': 'vs1.mp4',
+  'PM8KPOP': 'pm8-kpop.mp4',
+  'PocketDJ': 'pocketdj.mp4',
+  'DEEJAY ONE-KP': 'deejayone.mp4',
+  'K-SYNTH': 'k-synth.mp4',
 };
 
 const player = document.querySelector('#product-video');
 const videoStatus = document.querySelector('#video-status');
+const productSound = document.querySelector('#product-sound');
+const productVolume = document.querySelector('#product-volume');
+let lastProductVolume = player.volume || 1;
+function syncProductAudio() {
+  const silent = player.muted || player.volume === 0;
+  productSound.textContent = silent ? 'SOUND ON' : 'MUTE';
+  productSound.setAttribute('aria-label', silent ? '開啟產品影片聲音' : '靜音產品影片');
+  productSound.setAttribute('aria-pressed', String(silent));
+  productVolume.value = silent ? 0 : Math.round(player.volume * 100);
+}
+productSound.addEventListener('click', () => {
+  if (player.muted || player.volume === 0) {
+    player.volume = lastProductVolume;
+    player.muted = false;
+  } else {
+    lastProductVolume = player.volume;
+    player.muted = true;
+  }
+  syncProductAudio();
+});
+productVolume.addEventListener('input', () => {
+  const volume = Number(productVolume.value) / 100;
+  player.volume = volume;
+  player.muted = volume === 0;
+  if (volume > 0) lastProductVolume = volume;
+  syncProductAudio();
+});
+player.addEventListener('volumechange', syncProductAudio);
+syncProductAudio();
+
 let playbackRequest = 0;
 let selectedModel = '';
 player.addEventListener('error', () => {
@@ -131,8 +167,8 @@ const categories = [
   { name: 'KEYBOARDS', models: ['G-600L', 'G-600LA', 'G900'] },
   { name: 'GUITARS', models: ['JAMHERO2E'] },
   { name: 'DRUMS', models: ['STAGEROCKER2DJ'] },
-  { name: 'DEEJAY', models: ['XD301(BK)', 'BEATBOXSTATION', 'BOOMBOX'] },
-  { name: 'KARAOKE', models: ['PM31(SL)'] },
+  { name: 'DEEJAY', models: ['XD301', 'BEATBOXSTATION', 'BOOMBOX'] },
+  { name: 'KARAOKE', models: ['PM31'] },
   { name: 'PARTY SPEAKERS', models: ['CYCLONE-400(BK)', 'PARTY-GROOVE(BK)', 'PARTY-GROOVE-X3', 'CUBEX2-K', 'K200-2W', 'GBS-1/3/4'] },
   { name: 'K-POP', models: ['SONIC', 'VS-1 KPOP', 'PM8KPOP', 'PocketDJ', 'DEEJAY ONE-KP', 'K-SYNTH'] },
   { name: 'POCKET', models: [] },
