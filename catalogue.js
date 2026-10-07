@@ -1,25 +1,69 @@
 const assetBase = './assets/';
 // Prices shown in the supplied design; confirm before retail deployment.
-const prices = { 'G-600L': 29, FreedomSolo: 19, StageRocker2: 69 };
+
+const prices = { 
+  'G-600L': 29, 
+  'G-600LA': 39,
+  'G900': 49,
+  'JAMHERO2E': 59,
+  'STAGEROCKER2DJ': 69,
+  'XD301(BK)': 79,
+  'BEATBOXSTATION': 89,
+  'BOOMBOX': 99,
+  'PM31(SL)': 109,
+  'CYCLONE-400(BK)': 119,
+  'PARTY-GROOVE(BK)': 129,
+  'PARTY-GROOVE-X3': 139,
+  'CUBEX2-K': 149,
+  'K200-2W': 159,
+  'GBS-1/3/4': 169,
+};
+
 const catalogue = [
-  ['G-600L', 'Keyboard', 'keyb.png'],
+  ['G-600L', 'Keyboard', 'g600al.png'],
   ['G-600LA', 'Keyboard', 'g600al.png'],
   ['G900', 'Keyboard', 'g900.png'],
-  ['FreedomSolo', 'Drums', 'FreedomSolo.png'],
-  ['StageRocker2', 'Drums', 'StageRocker2.png'],
-  ['MIC-01', 'Mics', 'mic.svg'],
-  ['PARTY-12', 'Karaoke', 'speaker.svg'],
-  ['KEY-49', 'Keyboard', 'keys.svg'],
-  ['MIX-4', 'Mixers', 'mixer.svg'],
-  ['LIVE-02', 'Mics', 'duo.svg'],
+  ['JAMHERO2E', 'GUITAR', 'JAMHERO2E.jpg'],
+  ['STAGEROCKER2DJ', 'DRUMS', 'StageRocker2.png'], 
+  ['XD301(BK)', 'DEEJAY', 'XD301.png'], 
+  ['BEATBOXSTATION', 'DEEJAY', 'BEATBOXS.png'], 
+  ['BOOMBOX', 'DEEJAY', 'BoomBox.png'], 
+  ['PM31(SL)', 'KARAOKE ', 'PM31(SL).png'], 
+  ['CYCLONE-400(BK)', 'PARTY SPEAKERS', 'cyclone.png'], 
+  ['PARTY-GROOVE(BK)', 'PARTY SPEAKERS', 'pg.jpg'], 
+  ['PARTY-GROOVE-X3', 'PARTY SPEAKERS', 'PartyGroove3.png'], 
+  ['CUBEX2-K', 'PARTY SPEAKERS', 'cubex2.png'], 
+  ['K200-2W', 'PARTY SPEAKERS', 'K200-2W.png'], 
+  ['GBS-1/3/4', 'PARTY SPEAKERS', 'GBS.png'], 
+  ['SONIC', 'K-POP', 'SONIC(CY)_pic1.png'], 
+  ['VS-1 KPOP', 'K-POP', 'VS1KPOP(C)_PIc1-LED.png'], 
+  ['PM8KPOP', 'K-POP', 'PM8KPOP(CY)_pic01-LED.png'], 
+  ['PocketDJ', 'K-POP', 'PKDJ(Gr)_pic2.png'], 
+  ['DEEJAY ONE-KP', 'K-POP', 'DEEJAY ONE-KP(CY)_20260220_pic3-ED.png'], 
+  ['K-SYNTH', 'K-POP', 'kS!.13316.png'], 
+
 ];
+
 const productVideos = {
   'G-600L': 'G600L_PACK_EN_10MB.mp4',
   'G-600LA': 'G600LA_ENHD.mp4',
   'G900': 'G900_EN_10MB.mp4',
   'FreedomSolo': 'FreedomSolo_EN_10MB.mp4',
   'StageRocker2': 'Stage Rocker 2 DJ_2_HD.mp4',
+  'JAMHERO2E': 'JamHero3.mp4',
+  'STAGEROCKER2DJ': 'Stage Rocker 2 DJ_FRHD.mp4',
+  'XD301(BK)': 'XD301.mp4',
+  'BEATBOXSTATION': 'BEATBOX.mp4',
+  'BOOMBOX': 'BoomBox-FR.mp4',
+  'PM31(SL)': 'PM31(SL).mp4',
+  'CYCLONE-400(BK)': 'Cyclone400_FRHD.mp4',
+  'PARTY-GROOVE(BK)': 'PartyGroove-FRHD.mp4',
+  'PARTY-GROOVE-X3': 'PartyGroove-FRHD.mp4',
+  'CUBEX2-K': 'CUBE X2 KPOP-FRHD.mp4',
+  'K200-2W': 'K200-2W.mp4',
+  'GBS-1/3/4': 'GBS-1_3_4.mp4',
 };
+
 const player = document.querySelector('#product-video');
 const videoStatus = document.querySelector('#video-status');
 let playbackRequest = 0;
@@ -39,7 +83,7 @@ function makeCard([model, category, image], compact = false) {
   img.alt = model;
   img.loading = 'lazy';
   const title = document.createElement('strong');
-  title.textContent = model;
+  title.textContent = model === 'STAGEROCKER2DJ' ? 'STAGE\nROCKER2DJ' : model;
   button.append(img, title);
   {
     const price = document.createElement('span');
@@ -84,13 +128,13 @@ function makeCard([model, category, image], compact = false) {
 }
 // Curated collections can share products; model details stay in the catalogue above.
 const categories = [
-  { name: 'KEYBOARDS', models: ['G-600L', 'G-600LA', 'G900', 'KEY-49'] },
-  { name: 'GUITARS', models: [] },
-  { name: 'DRUMS', models: ['FreedomSolo', 'StageRocker2'] },
-  { name: 'DEEJAY', models: ['MIX-4'] },
-  { name: 'KARAOKE', models: ['LIVE-02', 'MIC-01', 'PARTY-12'] },
-  { name: 'PARTY SPEAKERS', models: ['PARTY-12'] },
-  { name: 'K-POP', models: [] },
+  { name: 'KEYBOARDS', models: ['G-600L', 'G-600LA', 'G900'] },
+  { name: 'GUITARS', models: ['JAMHERO2E'] },
+  { name: 'DRUMS', models: ['STAGEROCKER2DJ'] },
+  { name: 'DEEJAY', models: ['XD301(BK)', 'BEATBOXSTATION', 'BOOMBOX'] },
+  { name: 'KARAOKE', models: ['PM31(SL)'] },
+  { name: 'PARTY SPEAKERS', models: ['CYCLONE-400(BK)', 'PARTY-GROOVE(BK)', 'PARTY-GROOVE-X3', 'CUBEX2-K', 'K200-2W', 'GBS-1/3/4'] },
+  { name: 'K-POP', models: ['SONIC', 'VS-1 KPOP', 'PM8KPOP', 'PocketDJ', 'DEEJAY ONE-KP', 'K-SYNTH'] },
   { name: 'POCKET', models: [] },
   { name: 'mini VERSE', models: [] },
   { name: 'mySTAGE', models: [] },
@@ -98,15 +142,32 @@ const categories = [
   { name: '', models: [] },
 ];
 function selectCategory(category, scroll = false) {
-  const visible = category.models.map(model => catalogue.find(product => product[0] === model));
-  document.querySelector('.featured-grid').replaceChildren(...visible.map(product => makeCard(product, true)));
+  // Deleted products may still be listed in a category; skip stale references.
+  const visible = category.models
+    .map(model => catalogue.find(product => product && product[0] === model))
+    .filter(Boolean);
   const grid = document.querySelector('.featured-grid');
-  for (let i = visible.length; i < 8; i++) {
-    const slot = document.createElement('div');
-    slot.className = 'product-card product-placeholder';
-    slot.setAttribute('aria-hidden', 'true');
-    grid.append(slot);
+  grid.replaceChildren();
+  const pageCount = Math.max(1, Math.ceil(visible.length / 8));
+  for (let pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+    const page = document.createElement('div');
+    page.className = 'featured-page';
+    page.setAttribute('role', 'group');
+    page.setAttribute('aria-label', `${category.name}：第 ${pageIndex + 1} / ${pageCount} 頁`);
+    for (let slotIndex = 0; slotIndex < 8; slotIndex++) {
+      const product = visible[pageIndex * 8 + slotIndex];
+      if (product) {
+        page.append(makeCard(product, true));
+      } else {
+        const slot = document.createElement('div');
+        slot.className = 'product-card product-placeholder';
+        slot.setAttribute('aria-hidden', 'true');
+        page.append(slot);
+      }
+    }
+    grid.append(page);
   }
+  grid.scrollLeft = 0;
   document.querySelector('#featured').scrollTop = 0;
   document.querySelector('#featured-category').textContent = visible.length ? category.name : `${category.name}: 暫未有產品`;
   document.querySelector('#selection-status').textContent = `${category.name}: ${visible.length} products`;
@@ -201,7 +262,8 @@ introScreen.addEventListener('click', () => {
   productPage.focus({ preventScroll: true });
   resetIdleTimer();
   selectCategory(categories[0]);
-  document.querySelector('.featured-grid button.product-card').click();
+  const firstProduct = document.querySelector('.featured-grid button.product-card:not(:disabled)');
+  if (firstProduct) firstProduct.click();
 });
 
 if (reducedMotion) {
