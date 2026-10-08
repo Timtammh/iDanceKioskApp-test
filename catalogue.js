@@ -124,7 +124,7 @@ function makeCard([model, category, image], compact = false) {
   {
     const price = document.createElement('span');
     price.className = 'product-price';
-    price.append(prices[model] !== undefined ? String(prices[model]) : '—', ' ');
+    price.append(prices[model] !== undefined ? String(prices[model]) : '—');
     if (prices[model] === undefined) price.setAttribute('aria-label', '價錢待確認');
     const currency = document.createElement('small');
     currency.textContent = 'EUR';
@@ -184,7 +184,7 @@ function selectCategory(category, scroll = false) {
     .filter(Boolean);
   const grid = document.querySelector('.featured-grid');
   grid.replaceChildren();
-  const pageCount = Math.max(1, Math.ceil(visible.length / 8));
+  const pageCount = Math.ceil(visible.length / 8);
   for (let pageIndex = 0; pageIndex < pageCount; pageIndex++) {
     const page = document.createElement('div');
     page.className = 'featured-page';
@@ -194,11 +194,6 @@ function selectCategory(category, scroll = false) {
       const product = visible[pageIndex * 8 + slotIndex];
       if (product) {
         page.append(makeCard(product, true));
-      } else {
-        const slot = document.createElement('div');
-        slot.className = 'product-card product-placeholder';
-        slot.setAttribute('aria-hidden', 'true');
-        page.append(slot);
       }
     }
     grid.append(page);
