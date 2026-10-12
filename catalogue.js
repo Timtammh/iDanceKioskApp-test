@@ -154,11 +154,11 @@ const categories = [
   { name: 'DEEJAY', models: ['XD301', 'BEATBOXSTATION', 'BOOMBOX'] },
   { name: 'KARAOKE', models: ['PM31'] },
   { name: 'PARTY SPEAKERS', models: ['CYCLONE-400(BK)', 'PARTY-GROOVE(BK)', 'PARTY-GROOVE-X3', 'CUBEX2-K', 'K200-2W', 'GBS-1/3/4'] },
-  { name: 'K-POP', models: ['SONIC', 'VS-1 KPOP', 'PM8KPOP', 'PocketDJ', 'DEEJAY ONE-KP', 'K-SYNTH'] },
-  { name: 'POCKET', models: [] },
-  { name: 'mini VERSE', models: [] },
-  { name: 'mySTAGE', models: [] },
-  { name: 'GROOVE BRIX', models: [] },
+  { name: 'K-POP', image: 'kpop.png', models: ['SONIC', 'VS-1 KPOP', 'PM8KPOP', 'PocketDJ', 'DEEJAY ONE-KP', 'K-SYNTH'] },
+  { name: 'POCKET', image: 'pock.png', models: [] },
+  { name: 'mini VERSE', image: 'djmv.png', models: [] },
+  { name: 'mySTAGE', image: 'ms.png', models: [] },
+  { name: 'GROOVE BRIX', image: 'gb.png', models: [] },
   { name: '', models: [] },
 ];
 function selectCategory(category, scroll = false) {
@@ -197,8 +197,13 @@ categories.forEach(category => {
   button.className = 'category-card';
   button.dataset.category = category.name;
   button.setAttribute('aria-controls', 'featured');
-  const label = document.createElement('strong');
-  label.textContent = category.name;
+  const label = document.createElement(category.image ? 'img' : 'strong');
+  if (category.image) {
+    label.src = './assets/' + encodeURIComponent(category.image);
+    label.alt = category.name;
+  } else {
+    label.textContent = category.name;
+  }
   button.append(label);
   if (!category.name) {
     button.disabled = true;

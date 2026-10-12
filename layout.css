@@ -36,6 +36,11 @@ main { height: calc(100% - calc(var(--page-unit) * 12)); display: grid; grid-tem
 .category-grid { height: 100%; grid-template-rows: repeat(3, minmax(0, 1fr)); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: calc(var(--page-unit) * 1.5) calc(var(--page-unit) * 2); }
 .category-card { min-width: 0; min-height: 0; height: 100%; padding: calc(var(--page-unit) * .5); border: 3px solid #158dc5; border-radius: 7px; background: var(--cyan); color: #fff; cursor: pointer; }
 .category-card strong { display: block; font-size: clamp(13px, calc(var(--page-unit) * 3.445), 37.7px); font-weight: 900; line-height: 1.05; overflow-wrap: anywhere; }
+.category-card img { display: block; width: 76.5%; height: 72.25%; margin: auto; object-fit: contain; }
+.category-card[data-category="K-POP"] img,
+.category-card[data-category="POCKET"] img { width: 87.975%; height: 83.0875%; }
+.category-card[data-category="K-POP"] img { transform: scale(2); }
+.category-card[data-category="POCKET"] img { transform: scale(1.4); }
 .category-card[aria-pressed="true"] { background: #fff; color: #050505; }
 .category-card:hover:not(:disabled) { border-color: #005b92; }
 .category-card:disabled { cursor: default; }
