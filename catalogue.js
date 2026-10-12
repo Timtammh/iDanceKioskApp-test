@@ -72,31 +72,15 @@ const productVideos = {
 
 const player = document.querySelector('#product-video');
 const videoStatus = document.querySelector('#video-status');
-const productSound = document.querySelector('#product-sound');
 const productVolume = document.querySelector('#product-volume');
-let lastProductVolume = player.volume || 1;
 function syncProductAudio() {
   const silent = player.muted || player.volume === 0;
-  productSound.textContent = silent ? 'SOUND ON' : 'MUTE';
-  productSound.setAttribute('aria-label', silent ? '開啟產品影片聲音' : '靜音產品影片');
-  productSound.setAttribute('aria-pressed', String(silent));
   productVolume.value = silent ? 0 : Math.round(player.volume * 100);
 }
-productSound.addEventListener('click', () => {
-  if (player.muted || player.volume === 0) {
-    player.volume = lastProductVolume;
-    player.muted = false;
-  } else {
-    lastProductVolume = player.volume;
-    player.muted = true;
-  }
-  syncProductAudio();
-});
 productVolume.addEventListener('input', () => {
   const volume = Number(productVolume.value) / 100;
   player.volume = volume;
   player.muted = volume === 0;
-  if (volume > 0) lastProductVolume = volume;
   syncProductAudio();
 });
 player.addEventListener('volumechange', syncProductAudio);
@@ -152,12 +136,12 @@ function makeCard([model, category, image], compact = false) {
     player.poster = assetBase + image;
     player.src = './vo/' + encodeURIComponent(productVideos[model]);
     player.setAttribute('aria-label', `${model} 產品影片`);
-    videoStatus.textContent = model;
+    videoStatus.textContent = '';
 
     try {
       await player.play();
     } catch {
-      if (request === playbackRequest) videoStatus.textContent = `${model}：請按播放鍵重試。`;
+      if (request === playbackRequest) videoStatus.textContent = '請按播放鍵重試。';
     }
   });
   return button;
